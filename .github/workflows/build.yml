@@ -1,6 +1,7 @@
 name: 编译shortener
 
 on:
+  push:
   workflow_dispatch:
     inputs:
       upx:
@@ -14,7 +15,29 @@ on:
         default: false
         type: boolean
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TZ: Asia/Shanghai
+
+permissions:
+  contents: write
+  actions: write
+  
 jobs:
+ delete_old_runs:
+    name: 删除旧工作流
+    runs-on: ubuntu-latest
+    steps:
+      - name: 删除工作流 runs
+        uses: GitRML/delete-workflow-runs@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          retain_days: 1
+          keep_minimum_runs: 1
+          
  shortener:
     strategy:
       fail-fast: false
@@ -73,7 +96,7 @@ jobs:
       NAME: ${{ matrix.NAME }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: 获取最新Go
         run: |
           latest_version=$(curl -L -k -s https://golang.org/dl/?mode=json | grep -m 1 -o '"version": "[^"]*' | sed 's/"version": "//' | tr -d 'go" ')
