@@ -360,7 +360,7 @@ func (hs *HybridStorage) SaveRule(code string, req ApiRequest) error {
         // Redis可用时，只保存到Redis  
         err := hs.redis.SaveRule(code, req)  
         if err != nil {  
-            log.Printf("Redis保存失败: %v，回退到文件存储", err)  
+            log.Printf("Redis保存失败: %v，回退到本地short_data文件存储", err)  
             // Redis保存失败时，回退到本地文件  
             return hs.file.SaveRule(code, req)  
         }  
@@ -375,7 +375,7 @@ func (hs *HybridStorage) LoadRule(code string) (ApiRequest, bool, error) {
         // Redis可用时，从Redis读取  
         req, found, err := hs.redis.LoadRule(code)  
         if err != nil {  
-            log.Printf("Redis读取失败: %v，回退到文件存储", err)  
+            log.Printf("Redis读取失败: %v，回退到本地short_data文件存储", err)  
             // Redis读取失败时，回退到本地文件  
             return hs.file.LoadRule(code)  
         }  
@@ -390,7 +390,7 @@ func (hs *HybridStorage) DeleteRule(code string) error {
         // Redis可用时，只删除Redis中的数据  
         err := hs.redis.DeleteRule(code)  
         if err != nil {  
-            log.Printf("Redis删除失败: %v，回退到文件存储", err)  
+            log.Printf("Redis删除失败: %v，回退到本地short_data文件存储", err)  
             // Redis删除失败时，回退到本地文件  
             return hs.file.DeleteRule(code)  
         }  
@@ -405,7 +405,7 @@ func (hs *HybridStorage) ListRules() ([]ApiRequest, error) {
         // Redis可用时，从Redis获取列表  
         rules, err := hs.redis.ListRules()  
         if err != nil {  
-            log.Printf("Redis列表获取失败: %v，回退到文件存储", err)  
+            log.Printf("Redis列表获取失败: %v，回退到本地short_data文件存储", err)  
             // Redis失败时，回退到本地文件  
             return hs.file.ListRules()  
         }  
@@ -420,7 +420,7 @@ func (hs *HybridStorage) SaveStats(data Data) error {
         // Redis可用时，只保存到Redis  
         err := hs.redis.SaveStats(data)  
         if err != nil {  
-            log.Printf("Redis保存统计数据失败: %v，回退到文件存储", err)  
+            log.Printf("Redis保存统计数据失败: %v，回退到本地short_data文件存储", err)  
             // Redis保存失败时，回退到本地文件  
             return hs.file.SaveStats(data)  
         }  
@@ -435,57 +435,13 @@ func (hs *HybridStorage) LoadStats() (Data, error) {
         // Redis可用时，从Redis读取  
         stats, err := hs.redis.LoadStats()  
         if err != nil {  
-            log.Printf("Redis读取统计数据失败: %v，回退到文件存储", err)  
+            log.Printf("Redis读取统计数据失败: %v，回退到本地short_data文件存储", err)  
             // Redis读取失败时，回退到本地文件  
             return hs.file.LoadStats()  
         }  
         return stats, nil  
     }  
     // Redis不可用时，从本地文件读取  
-    return hs.file.LoadStats()  
-} 
-  
-func (hs *HybridStorage) DeleteRule(code string) error {  
-    if redisEnabled {  
-        err := hs.redis.DeleteRule(code)  
-        if err != nil {  
-            log.Printf("Redis删除失败: %v", err)  
-        }  
-    }  
-    return hs.file.DeleteRule(code)  
-}  
-  
-func (hs *HybridStorage) ListRules() ([]ApiRequest, error) {  
-    if redisEnabled {  
-        rules, err := hs.redis.ListRules()  
-        if err != nil {  
-            log.Printf("Redis列表获取失败，回退到文件存储: %v", err)  
-        } else {  
-            return rules, nil  
-        }  
-    }  
-    return hs.file.ListRules()  
-}  
-  
-func (hs *HybridStorage) SaveStats(data Data) error {  
-    if redisEnabled {  
-        err := hs.redis.SaveStats(data)  
-        if err != nil {  
-            log.Printf("Redis保存统计数据失败: %v", err)  
-        }  
-    }  
-    return hs.file.SaveStats(data)  
-}  
-  
-func (hs *HybridStorage) LoadStats() (Data, error) {  
-    if redisEnabled {  
-        stats, err := hs.redis.LoadStats()   
-        if err != nil {  
-            log.Printf("Redis读取统计数据失败，回退到文件存储: %v", err)  
-        } else {  
-            return stats, nil  
-        }  
-    }  
     return hs.file.LoadStats()  
 }  
   
