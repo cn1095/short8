@@ -2073,35 +2073,34 @@ func renderAdminPage(w http.ResponseWriter, r *http.Request, data []ApiRequest) 
     0% { transform: rotate(0deg); }  
     100% { transform: rotate(360deg); }  
 }
-.search-button-group {  
-    display: flex;  
-	justify-content: space-between;
-    align-items: center;  
-    margin: 8px 0;  
-    flex-wrap: wrap;  
+.search-button-group {    
+    display: flex !important;    
+    justify-content: space-between !important;    
+    align-items: center !important;    
+    margin: 8px 0 !important;    
+    flex-wrap: nowrap !important;  /* 禁止换行 */  
 }  
   
-.search-input {  
-    width: 200px;  
-    padding: 8px 12px;  
-    border: 1px solid #ddd;  
-    border-radius: 6px;  
-    font-size: 14px;  
-    outline: none;  
-    transition: border-color 0.3s ease;  
+.search-input {    
+    width: 200px !important;    
+    max-width: 200px !important;  /* 限制最大宽度 */  
+    min-width: 150px !important;  /* 设置最小宽度 */  
+    padding: 8px 12px;    
+    border: 1px solid #ddd;    
+    border-radius: 6px;    
+    font-size: 14px;    
+    outline: none;    
+    transition: border-color 0.3s ease;    
+    flex-shrink: 0;  /* 防止收缩 */  
 }  
   
-.search-input:focus {  
-    border-color: #007bff;  
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);  
-}
-/* Vue样式按钮组 */  
 .button-group {  
-	display: flex;  
-	gap: 8px;  
-	margin: 0;  
-	flex-wrap: wrap;  
-	align-items: center;  
+    display: flex !important;  
+    gap: 8px;  
+    margin: 0 !important;  
+    flex-wrap: nowrap !important;  /* 按钮组也不换行 */  
+    align-items: center !important;  
+    flex-shrink: 0;  /* 防止收缩 */  
 }  
   
 .vue-btn {  
