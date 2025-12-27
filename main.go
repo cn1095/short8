@@ -2845,6 +2845,18 @@ function deselectAll() {
     selectAllCheckbox.checked = false;  
     updateDeleteButton();  
 }
+
+// 取消所有页面的选中  
+function deselectAllPages() {  
+    var checkboxes = document.querySelectorAll(".row-checkbox");  
+    var selectAllCheckbox = document.getElementById("selectAllCheckbox");  
+      
+    checkboxes.forEach(function(checkbox) {  
+        checkbox.checked = false;  
+    });  
+    selectAllCheckbox.checked = false;  
+    updateDeleteButton();  
+}
   
 // 切换全选状态（当前页）  
 function toggleSelectAll() {  
@@ -2862,12 +2874,15 @@ function toggleSelectAll() {
 // 更新删除选中按钮状态  
 function updateDeleteButton() {  
 	var checkboxes = document.querySelectorAll(".row-checkbox:checked");  
-	var deleteBtn = document.getElementById("deleteSelectedBtn");  
+	var deleteBtn = document.getElementById("deleteSelectedBtn");
+	var deselectAllPagesBtn = document.getElementById("deselectAllPagesBtn"); 
 	  
 	if (checkboxes.length > 0) {  
-		deleteBtn.disabled = false;  
+		deleteBtn.disabled = false;
+		deselectAllPagesBtn.disabled = false;
 	} else {  
-		deleteBtn.disabled = true;  
+		deleteBtn.disabled = true;
+		deselectAllPagesBtn.disabled = true;
 	}  
 }  
   
@@ -3051,6 +3066,7 @@ function scrollToTop() {
         			<div id="hiddenButtons" class="hidden-buttons">    
 						<!-- <button class="vue-btn vue-btn-success" onclick="selectAll()">全选</button> --> 
 						<!-- <button class="vue-btn vue-btn-warning" onclick="deselectAll()">取消全选</button> --> 
+						<button id="deselectAllPagesBtn" class="vue-btn vue-btn-warnin" onclick="deselectAllPages()" disabled>取消所有选中</button>
             			<button id="deleteSelectedBtn" class="vue-btn vue-btn-danger" onclick="deleteSelected()" disabled>删除选中</button>    
         			</div>    
     			</div>  
