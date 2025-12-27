@@ -2281,8 +2281,8 @@ td:first-child {
     position: fixed;  
     bottom: 30px;  
     right: 30px;  
-    width: 50px;  
-    height: 50px;  
+    width: 70px;  
+    height: 70px;  
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);  
     color: white;  
     border: none;  
@@ -2291,14 +2291,14 @@ td:first-child {
     display: none;  
     align-items: center;  
     justify-content: center;  
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);  
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);  
     transition: all 0.3s ease;  
     z-index: 1000;  
 }  
   
 .back-to-top-btn:hover {  
-    transform: translateY(-3px);  
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);  
+    transform: translateY(-4px);  
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);  
 }  
   
 .back-to-top-btn.show {  
@@ -3095,8 +3095,8 @@ function scrollToTop() {
 </div>
 <!-- 悬浮回到顶部按钮 -->  
 <button id="backToTop" class="back-to-top-btn" onclick="scrollToTop()">  
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">  
-        <path d="M18 15l-6-6-6 6"/>  
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" stroke="none">  
+        <path d="M7 14l5-5 5 5z"/>  
     </svg>  
 </button>
 	<!-- 加载弹窗 -->  
