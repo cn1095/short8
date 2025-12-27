@@ -2287,8 +2287,7 @@ func renderAdminPage(w http.ResponseWriter, r *http.Request, data []ApiRequest) 
 				if (i < cells.length - 1) { // 跳过最后一列（操作按钮）
 					var field = cells[i].getAttribute("data-field");
 					if (field) {
-						var originalValue = cells[i].getAttribute("data-original") || "";  
-            			cells[i].innerHTML = originalValue;
+						cells[i].innerHTML = cells[i].querySelector("input, textarea, select").value;
 					}
 				}
 			}
