@@ -129,7 +129,9 @@ jobs:
             if [ "${GOos}" == "windows" ]; then
               curl -L https://github.com/thongtech/go-legacy-win7/releases/download/v1.25.5-1/go-legacy-win7-1.25.5-1.linux_amd64.tar.gz -o go-legacy-win7.tar.gz
               sudo tar --no-same-permissions -xzvf go-legacy-win7.tar.gz -C /opt/
+              sudo chmod -R 755 /opt/go-legacy-win7-1.25.5-1
               export GOROOT=/opt/go-legacy-win7-1.25.5-1
+              echo "ok"
             fi
             go mod tidy
             go build -ldflags="-s -w"
