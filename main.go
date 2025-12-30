@@ -3662,34 +3662,15 @@ func initializeIPDatabases() {
 	// log.Println("IP数据库异步初始化完成")
 }
 
-func runAsDaemon() {
-	switch runtime.GOOS {
-	case "linux", "freebsd":
-		if os.Getppid() != 1 {
-			cmd := exec.Command(os.Args[0], os.Args[1:]...)
-			cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true}
-			cmd.Stdout, cmd.Stderr, cmd.Stdin = nil, nil, nil
-			
-			// 显式传递环境变量  
-            cmd.Env = os.Environ()
-			err := cmd.Start()
-			if err != nil {
-				log.Fatalf("后台运行失败: %v", err)
-			}
-			os.Exit(0)
-		}
-
-	case "windows":
-		cmd := exec.Command(os.Args[0], os.Args[1:]...)
-		err := cmd.Start()
-		if err != nil {
-			log.Fatalf("后台运行失败: %v", err)
-		}
-		os.Exit(0)
-
-	default:
-		log.Println("当前系统不支持后台模式")
-	}
+func runAsDaemon() {  
+    switch runtime.GOOS {  
+    case "linux", "freebsd", "darwin":  
+        runAsDaemonUnix()  
+    case "windows":  
+        runAsDaemonWindows()  
+    default:  
+        log.Println("当前系统不支持后台模式")  
+    }  
 }
 
 func main() {
@@ -4002,4 +3983,34 @@ func main() {
 	closeRedis()
 	ln.Close()
 	os.Exit(0)
+}
+
+//go:build !windows  
+// +build !windows  
+  
+func runAsDaemonUnix() {  
+    if os.Getppid() != 1 {  
+        cmd := exec.Command(os.Args[0], os.Args[1:]...)  
+        cmd.SysProcAttr = &syscall.SysProcAttr{Setsid: true}  
+        cmd.Stdout, cmd.Stderr, cmd.Stdin = nil, nil, nil  
+          
+        cmd.Env = os.Environ()  
+        err := cmd.Start()  
+        if err != nil {  
+            log.Fatalf("后台运行失败: %v", err)  
+        }  
+        os.Exit(0)  
+    }  
+}  
+  
+//go:build windows  
+// +build windows  
+  
+func runAsDaemonWindows() {  
+    cmd := exec.Command(os.Args[0], os.Args[1:]...)  
+    err := cmd.Start()  
+    if err != nil {  
+        log.Fatalf("后台运行失败: %v", err)  
+    }  
+    os.Exit(0)  
 }
